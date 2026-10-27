@@ -166,7 +166,7 @@
     background: linear-gradient(180deg, rgba(6, 5, 13, .15), rgba(6, 5, 13, .55) 35%, rgba(6, 5, 13, .7));
     opacity: 0; visibility: hidden;
     transition: opacity 1.2s ease, visibility 0s linear 1.2s;
-    -webkit-user-select: text; user-select: text;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   }
   #letter.show { opacity: 1; visibility: visible; transition: opacity 1.8s ease .2s; }
   .wrap {
@@ -217,18 +217,18 @@
   .sign b { display: block; font-weight: 500; color: var(--blush); }
   .moonline { text-align: center; margin-top: -.3rem; color: var(--blush); opacity: .8; }
   .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-top: 1.4rem; }
-  #wish {
+  .moment {
     position: fixed; inset: 0; z-index: 15; pointer-events: none;
     display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
     padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px));
     background: radial-gradient(ellipse at center, rgba(6, 5, 13, .9) 0%, rgba(6, 5, 13, .72) 60%, rgba(6, 5, 13, .55) 100%);
     opacity: 0; transition: opacity 1s ease;
   }
-  #wish > * { filter: blur(8px); transform: translateY(12px); transition: filter 1.2s ease, transform 1.2s ease; }
-  #wish.on { opacity: 1; }
-  #wish.on > * { filter: none; transform: none; }
-  #wish small { display: block; margin-bottom: .5rem; font: 300 .62rem/1.4 var(--label); letter-spacing: .42em; text-transform: uppercase; color: var(--gold); padding-left: .42em; }
-  #wish .script { display: block; font-size: clamp(2rem, 9vw, 2.8rem); }
+  .moment > * { filter: blur(8px); transform: translateY(12px); transition: filter 1.2s ease, transform 1.2s ease; }
+  .moment.on { opacity: 1; }
+  .moment.on > * { filter: none; transform: none; }
+  .moment small { display: block; margin-bottom: .5rem; font: 300 .62rem/1.4 var(--label); letter-spacing: .42em; text-transform: uppercase; color: var(--gold); padding-left: .42em; }
+  .moment .script { display: block; font-size: clamp(2rem, 9vw, 2.8rem); text-wrap: balance; }
   .again {
     cursor: pointer;
     display: inline-flex; align-items: center; gap: .7rem;
@@ -238,6 +238,26 @@
   }
   .again svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 
+  .holdhint { text-align: center; color: var(--blush); opacity: .7; margin-top: .6rem; }
+
+  .moons { display: flex; flex-direction: column; gap: 1.2rem; text-align: center; padding-block: .6rem; }
+  .moon-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem .5rem; }
+  .moon-row figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .7rem; min-width: 0; }
+  .moon-row canvas {
+    position: static; width: 64px; height: 64px;
+    filter: drop-shadow(0 0 14px rgba(255, 240, 220, .3));
+  }
+  .moon-row b { display: block; font: italic 500 clamp(1rem, 4.3vw, 1.15rem)/1.2 var(--serif); color: var(--ink); text-wrap: balance; }
+  .moon-row span { display: block; margin-top: .35rem; font: 300 .58rem/1.4 var(--label); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+  .moon-row em { display: block; margin-top: .2rem; font: italic 400 .95rem/1.3 var(--serif); color: var(--blush); }
+
+  .tw .ghost { visibility: hidden; }
+  .tw.typing .typed::after {
+    content: ""; display: inline-block; width: 1px; height: 1em; margin-left: 2px; vertical-align: -.12em;
+    background: var(--gold); animation: caret .8s steps(1) infinite;
+  }
+  #top { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 16; pointer-events: none; }
+
   .rv { opacity: 0; transform: translateY(18px); filter: blur(6px); transition: opacity 1.3s ease, transform 1.3s cubic-bezier(.2, .7, .2, 1), filter 1.3s ease; }
   .rv.in { opacity: 1; transform: none; filter: none; }
 
@@ -245,6 +265,7 @@
   @keyframes grain { 0% { transform: translate(0, 0); } 25% { transform: translate(-5%, 3%); } 50% { transform: translate(4%, -4%); } 75% { transform: translate(-3%, -2%); } 100% { transform: translate(2%, 5%); } }
   @keyframes flash { 0% { opacity: 0; } 7% { opacity: 1; } 100% { opacity: 0; } }
   @keyframes shake { 0%, 100% { transform: none; } 15% { transform: translate(-7px, 4px); } 35% { transform: translate(6px, -5px); } 55% { transform: translate(-4px, 2px); } 75% { transform: translate(2px, -1px); } }
+  @keyframes caret { 50% { opacity: 0; } }
   @keyframes ping { from { transform: scale(1); opacity: .8; } to { transform: scale(1.9); opacity: 0; } }
   @keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.12); } }
   @keyframes shine { from { background-position: 100% 0; } to { background-position: -150% 0; } }
@@ -306,8 +327,8 @@
       <p class="eyebrow moonline">Same sky · same moon</p>
     </div>
 
-    <p class="t rv"><span id="nMonths">Forty months of us today.</span> I'm so grateful to have you in my life.</p>
-    <p class="t rv">You're the best thing that has ever happened to me. You are</p>
+    <p class="t rv tw"><span id="nMonths">Forty months of us today.</span> I'm so grateful to have you in my life.</p>
+    <p class="t rv tw">You're the best thing that has ever happened to me. You are</p>
     <ul class="traits rv">
       <li>the most beautiful girl,</li>
       <li>the smartest,</li>
@@ -324,10 +345,21 @@
 
     <div class="orn rv" aria-hidden="true">✦✦✦</div>
 
-    <p class="t rv">I want to spend my whole life with you. I can't wait for us to live our lives together, and to celebrate our monthly anniversary, every single month, till we die.</p>
+    <div class="moons rv">
+      <p class="eyebrow">Our moons</p>
+      <div class="moon-row">
+        <figure><canvas data-moon="1132410600000"></canvas><figcaption><b>The night you were born</b><span>19 Nov 2005</span><em></em></figcaption></figure>
+        <figure><canvas data-moon="1115130600000"></canvas><figcaption><b>The night I was born</b><span>3 May 2005</span><em></em></figcaption></figure>
+        <figure><canvas data-moon="now"></canvas><figcaption><b>Tonight</b><span id="tonightDate">28 Oct 2026</span><em></em></figcaption></figure>
+      </div>
+    </div>
+
+    <p class="t rv tw">I want to spend my whole life with you. I can't wait for us to live our lives together, and to celebrate our monthly anniversary, every single month, till we die.</p>
 
     <h3 class="script love rv">I love you so much.</h3>
     <p class="sign rv">Forever yours,<b>Kichu ♥&#xFE0E;</b></p>
+
+    <p class="eyebrow holdhint rv">Press and hold anywhere ✦</p>
 
     <div class="actions rv">
       <button class="again" id="wishBtn" type="button">
@@ -342,7 +374,9 @@
   </div>
 </main>
 
-<div id="wish" aria-live="polite"><small>Wish sent to the stars</small><span class="script">I'll always wish for you.</span></div>
+<div id="wish" class="moment" aria-live="polite"><small>Wish sent to the stars</small><span class="script">I'll always wish for you.</span></div>
+<div id="lanternMsg" class="moment" aria-live="polite"><small id="lanternCount">40 lanterns</small><span class="script">One for every month of us.</span></div>
+<canvas id="top" aria-hidden="true"></canvas>
 
 
 <script>
@@ -353,6 +387,7 @@
   const capEl = $('#cap'), flash = $('#flash'), intro = $('#intro'), letter = $('#letter');
   const skip = $('#skip'), soundBtn = $('#sound');
   const lblA = $('#lblA'), lblB = $('#lblB'), lblKm = $('#lblKm');
+  const topCv = $('#top'), tc = topCv.getContext('2d');
 
   let W = 0, H = 0, CX = 0, CY = 0, S = 0;
   const clamp = v => Math.max(0, Math.min(1, v));
@@ -377,7 +412,8 @@
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = innerWidth; H = innerHeight;
-    for (const cv of [bg, fx]) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+    for (const cv of [bg, fx, topCv]) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+    tc.setTransform(dpr, 0, 0, dpr, 0, 0);
     b.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     CX = W / 2; CY = H * .45; S = Math.min(W, H);
@@ -416,8 +452,44 @@
       y: v * v * v * p0.y + 3 * v * v * u * p1.y + 3 * v * u * u * p2.y + u * u * u * p3.y
     };
   };
-  const homeA = t => ({ x: W * .3 + Math.sin(t * .7) * 6, y: H * .2 + Math.cos(t * .9) * 5 });
-  const homeB = t => ({ x: W * .7 + Math.cos(t * .6) * 6, y: H * .66 + Math.sin(t * .8) * 5 });
+  // simplified outline of India as [longitude, latitude]; the two stars start at Jaipur and Kochi on it
+  const INDIA = [
+    [68.3, 23.7], [69.2, 22.8], [68.97, 22.24], [69.8, 21.4], [70.9, 20.75], [72.2, 21.2], [72.6, 22.2], [72.85, 21.3],
+    [72.85, 20], [72.85, 18.95], [73.2, 17.5], [73.7, 16], [73.9, 15.2], [74.4, 14.3], [74.85, 12.85], [75.4, 11.8],
+    [75.8, 11.2], [76.2, 9.9], [76.6, 8.9], [77.05, 8.35], [77.55, 8.08], [78.1, 8.7], [78.4, 9.2], [79.1, 9.3],
+    [79.4, 10.3], [79.85, 10.8], [79.85, 11.9], [80.3, 13.1], [80.2, 14.6], [80.4, 15.6], [81.2, 15.9], [82.3, 16.6],
+    [83.3, 17.6], [84.6, 18.9], [85.9, 19.8], [86.75, 20.3], [86.95, 21.4], [87.9, 21.7], [88.9, 21.6], [89, 22.6],
+    [88.7, 23.4], [88.6, 24.3], [88.1, 24.7], [88.3, 25.3], [88.9, 25.6], [88.4, 26.2], [89.8, 25.9], [90.6, 25.2],
+    [92, 25.1], [92.4, 24.8], [92.2, 24.2], [91.6, 24.1], [91.2, 23.6], [91.5, 23], [91.8, 23.3], [92.3, 22.4],
+    [92.7, 21.95], [93.2, 22.3], [93.4, 23.6], [94.2, 23.8], [94.6, 25.1], [95.2, 26], [95.8, 27], [96.6, 27.3],
+    [97.4, 28.2], [96.6, 28.9], [95.4, 29.3], [94.2, 29.2], [92.9, 28], [92, 27.8], [91.6, 27.1], [90.4, 26.85],
+    [89.8, 26.75], [88.9, 27.1], [88.9, 28], [88.1, 27.9], [88.15, 26.5], [87, 26.4], [85.9, 26.6], [84.6, 27.3],
+    [83.3, 27.35], [82, 27.9], [80.9, 28.5], [80.06, 28.9], [80.25, 29.8], [81, 30.2], [79.4, 31], [78.7, 31.6],
+    [78.45, 32.5], [79.3, 32.6], [79.5, 33.4], [80.2, 34.9], [79.8, 35.6], [78, 35.5], [77, 35.9], [75.8, 36.6],
+    [74.9, 37.05], [74, 36.9], [72.6, 36.8], [71.6, 36.5], [72.5, 35.6], [73.7, 34.7], [73.9, 33.7], [74.6, 32.8],
+    [75.3, 32.4], [74.6, 31.6], [74.5, 31], [73.9, 30.4], [73.35, 29.9], [72.4, 28.6], [71, 27.9], [70, 27.4],
+    [69.5, 26.7], [70.2, 26], [70.6, 25.6], [71.1, 24.7], [70.3, 24.3], [69, 24.25], [68.8, 23.9]
+  ];
+  function proj(lon, lat) {
+    const sc = Math.min(W * 1.15 / 29.5, H * .62 / 29);
+    return { x: CX + (lon - 80.5) * sc * .924, y: CY - (lat - 22.5) * sc };
+  }
+  function drawMap(a) {
+    const p = INDIA.map(([lo, la]) => proj(lo, la)), n = p.length;
+    const mid = (i, j) => ({ x: (p[i].x + p[j].x) / 2, y: (p[i].y + p[j].y) / 2 });
+    b.beginPath();
+    let m = mid(n - 1, 0); b.moveTo(m.x, m.y);
+    for (let i = 0; i < n; i++) { m = mid(i, (i + 1) % n); b.quadraticCurveTo(p[i].x, p[i].y, m.x, m.y); }
+    b.closePath();
+    b.fillStyle = 'rgba(255,126,179,1)'; b.globalAlpha = a * .045; b.fill();
+    b.strokeStyle = 'rgba(255,175,210,1)'; b.lineJoin = 'round';
+    b.globalAlpha = a * .09; b.lineWidth = 7; b.stroke();
+    b.globalAlpha = a * .5; b.lineWidth = 1.1; b.stroke();
+    b.fillStyle = '#fff';
+  }
+  const JAIPUR = [75.79, 26.91], KOCHI = [76.27, 9.93];
+  const homeA = t => { const p = proj(...JAIPUR); return { x: p.x + Math.sin(t * .7) * 4, y: p.y + Math.cos(t * .9) * 3 }; };
+  const homeB = t => { const p = proj(...KOCHI); return { x: p.x + Math.cos(t * .6) * 4, y: p.y + Math.sin(t * .8) * 3 }; };
 
   function placeStars(t) {
     const r0 = S * .26, th0 = -Math.PI * .28;
@@ -654,6 +726,24 @@
       live.push(src, o);
     }
 
+    function warp(t, dur) {
+      const src = ac.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+      const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 1.2;
+      bp.frequency.setValueAtTime(300, t);
+      bp.frequency.exponentialRampToValueAtTime(3800, t + dur * .55);
+      bp.frequency.exponentialRampToValueAtTime(260, t + dur);
+      const g = ac.createGain();
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.26, t + dur * .5); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      src.connect(bp); bp.connect(g); route(g, .8, .5); src.start(t); src.stop(t + dur + .05);
+      const o = ac.createOscillator(), og = ac.createGain();
+      o.frequency.setValueAtTime(60, t);
+      o.frequency.exponentialRampToValueAtTime(140, t + dur * .55);
+      o.frequency.exponentialRampToValueAtTime(70, t + dur);
+      og.gain.setValueAtTime(.0001, t); og.gain.exponentialRampToValueAtTime(.3, t + dur * .5); og.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      o.connect(og); route(og, 1, .2); o.start(t); o.stop(t + dur + .05);
+      [77, 84, 89].forEach((m, i) => bell(m, t + dur - .15 + i * .06, .08, rand(-.4, .4)));
+    }
+
     function boom(t) {
       const o = ac.createOscillator(), g = ac.createGain();
       o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(38, t + .9);
@@ -728,6 +818,13 @@
         else if (name === 'boom') { cancel(); boom(t); setPhase('bloom'); nextNote = t + .05; step = 0; bar = 0; }
         else if (name === 'gliss') gliss(t, false);
         else if (name === 'fall') gliss(t, true);
+        else if (name === 'warp') {
+          master.gain.cancelScheduledValues(ac.currentTime);
+          master.gain.setTargetAtTime(muted ? 0 : .9, ac.currentTime, .1);
+          warp(t, WARP);
+        }
+        else if (name === 'beat') { thump(t + .087, 1); thump(t + .26, .6); }
+        else if (name === 'lanterns') { gliss(t, false); [72, 76, 79, 84, 88].forEach((m, i) => bell(m, t + .8 + i * .35, .09, rand(-.5, .5))); }
         else if (name === 'wish') { gliss(t, false); [84, 88, 91, 96].forEach((m, i) => bell(m, t + .5 + i * .09, .08, rand(-.6, .6))); }
       },
       letter(fromSkip) { if (!ac) return; if (fromSkip) cancel(); setPhase('letter'); },
@@ -746,7 +843,14 @@
   })();
 
   /* ---------- touch ---------- */
-  const touch = { on: false, x: 0, y: 0 };
+  const touch = { on: false, x: 0, y: 0, sx: 0, sy: 0, moved: 0, downAt: 0 };
+  // each particle's spot in the heart that gathers under a held finger
+  for (const p of P) {
+    let q;
+    if (Math.random() < .45) q = heartAt(Math.random() * Math.PI * 2);
+    else do { q = { x: rand(-17, 17), y: rand(-13, 18) }; } while (!inHeart(q.x, q.y));
+    p.hx = q.x; p.hy = q.y - 2.5;
+  }
   let ptx = 0, pty = 0, tpx = 0, tpy = 0, started = false;
   const sparks = [];
   function burst(x, y) {
@@ -756,11 +860,13 @@
     }
   }
   addEventListener('pointerdown', e => {
-    touch.on = true; touch.x = e.clientX; touch.y = e.clientY;
+    touch.on = true; touch.x = touch.sx = e.clientX; touch.y = touch.sy = e.clientY;
+    touch.moved = 0; touch.downAt = time;
     if (started && !e.target.closest('button')) { burst(e.clientX, e.clientY); Sound.spark(); }
   }, { passive: true });
   addEventListener('pointermove', e => {
     touch.x = e.clientX; touch.y = e.clientY;
+    if (touch.on) touch.moved = Math.max(touch.moved, Math.hypot(e.clientX - touch.sx, e.clientY - touch.sy));
     tpx = e.clientX / W * 2 - 1; tpy = e.clientY / H * 2 - 1;
   }, { passive: true });
   addEventListener('pointerup', () => { touch.on = false; });
@@ -830,16 +936,46 @@
     b.fillStyle = g; b.fillRect(s.x - .6, s.y - L2, 1.2, L2 * 2);
   }
 
+  /* ---------- real moon phases ---------- */
   const MARIA = [[-.3, -.2, .28], [.25, .1, .2], [.05, .42, .16], [-.35, .3, .12], [.4, -.35, .1]];
+  const SYNODIC = 29.530588853, NEW_MOON = Date.UTC(2000, 0, 6, 18, 14);
+  const moonPhase = t => { const p = ((t - NEW_MOON) / 864e5 / SYNODIC) % 1; return p < 0 ? p + 1 : p; };
+  const moonLit = p => (1 - Math.cos(2 * Math.PI * p)) / 2;
+  function phaseName(p) {
+    if (p < .03 || p > .97) return 'new moon';
+    if (p < .22) return 'waxing crescent';
+    if (p < .28) return 'first quarter';
+    if (p < .47) return 'waxing gibbous';
+    if (p < .53) return 'full moon';
+    if (p < .72) return 'waning gibbous';
+    if (p < .78) return 'last quarter';
+    return 'waning crescent';
+  }
+  // draws the lit part of the moon for phase p (0 new, .5 full), as seen from the northern hemisphere
+  function drawPhase(g, x, y, r, p) {
+    g.save();
+    g.globalCompositeOperation = 'source-over';
+    g.fillStyle = 'rgba(70,60,92,.55)';
+    g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill();
+    const k = Math.cos(2 * Math.PI * p);
+    g.translate(x, y);
+    if (p > .5) g.scale(-1, 1);
+    g.beginPath();
+    g.arc(0, 0, r, -Math.PI / 2, Math.PI / 2, false);
+    g.ellipse(0, 0, Math.abs(k) * r + .01, r, 0, Math.PI / 2, -Math.PI / 2, k > 0);
+    g.closePath();
+    const gr = g.createRadialGradient(-r * .3, -r * .3, r * .1, 0, 0, r);
+    gr.addColorStop(0, '#fffaf0'); gr.addColorStop(1, '#e6d8c2');
+    g.fillStyle = gr; g.fill();
+    g.clip();
+    g.fillStyle = 'rgba(170,150,140,.24)';
+    for (const [dx, dy, rr] of MARIA) { g.beginPath(); g.arc(dx * r, dy * r, rr * r, 0, 6.283); g.fill(); }
+    g.restore();
+  }
   function drawMoon(a) {
     const r = S * .05, x = W * .76 + ptx * 4, y = H * .065 + r + pty * 4, z = r * 10;
-    b.globalAlpha = a * .9; b.drawImage(SPR.white, x - z / 2, y - z / 2, z, z);
-    b.globalCompositeOperation = 'source-over';
-    const g = b.createRadialGradient(x - r * .3, y - r * .3, r * .1, x, y, r);
-    g.addColorStop(0, '#fffaf0'); g.addColorStop(1, '#e6d8c2');
-    b.globalAlpha = a; b.fillStyle = g; b.beginPath(); b.arc(x, y, r, 0, 6.283); b.fill();
-    b.fillStyle = 'rgba(170,150,140,.22)';
-    for (const [dx, dy, rr] of MARIA) { b.beginPath(); b.arc(x + dx * r, y + dy * r, rr * r, 0, 6.283); b.fill(); }
+    b.globalAlpha = a * (.35 + .55 * moonLit(MOON_NOW)); b.drawImage(SPR.white, x - z / 2, y - z / 2, z, z);
+    b.globalAlpha = a; drawPhase(b, x, y, r, MOON_NOW);
     b.globalCompositeOperation = 'lighter'; b.fillStyle = '#fff';
   }
   const BANDS = [[.22, '255,110,170', 0], [.3, '150,110,255', 2], [.38, '255,200,130', 4]];
@@ -857,18 +993,50 @@
     b.fillStyle = '#fff';
   }
 
+  /* ---------- warp-speed opening ---------- */
+  let warpT = -1;
+  const WARP = 2.6;
+  const WARP_COLORS = ['#ffffff', '#ffc2dc', '#ffd38a', '#ff9ec4'];
+  const warpStars = Array.from({ length: 260 }, () => ({ x: rand(-1, 1), y: rand(-1, 1), z: rand(.05, 1), c: WARP_COLORS[(Math.random() * 4) | 0] }));
+  function drawWarp(f, u) {
+    const spd = Math.sin(Math.PI * u) ** 2 * .03 + .002, k = S * .5;
+    b.lineCap = 'round';
+    for (const w of warpStars) {
+      w.z -= spd * f;
+      if (w.z <= .03) { w.z = 1; w.x = rand(-1, 1); w.y = rand(-1, 1); }
+      const x = CX + w.x * k / w.z, y = CY + w.y * k / w.z;
+      if (x < -60 || x > W + 60 || y < -60 || y > H + 60) continue;
+      const z2 = Math.min(1.2, w.z + spd * 7);
+      b.globalAlpha = clamp(1.1 - w.z) * clamp(u * 6); b.strokeStyle = w.c; b.lineWidth = .4 + (1 - w.z) * 2.2;
+      b.beginPath(); b.moveTo(CX + w.x * k / z2, CY + w.y * k / z2); b.lineTo(x, y); b.stroke();
+    }
+  }
+  function startWarp() {
+    warpT = time; calmT = -1;
+    for (const p of P) p.mode = 0;
+    c.clearRect(0, 0, W, H);
+    skip.hidden = true;
+    Sound.fx('warp');
+  }
+
   function drawBg(f, starsOn, starV, orbitU) {
     b.clearRect(0, 0, W, H);
     b.globalCompositeOperation = 'lighter';
     const calmA = calmT < 0 ? 0 : clamp((time - calmT) / 3);
     if (calmA) drawAurora(calmA);
+    const wu = warpT < 0 ? -1 : clamp((time - warpT) / WARP);
+    const skyA = wu < 0 ? 1 : 1 - Math.sin(Math.PI * wu);
     b.fillStyle = '#fff';
     for (const s of sky) {
-      const a = .2 + .8 * (.5 + .5 * Math.sin(time * s.s + s.p));
+      const a = (.2 + .8 * (.5 + .5 * Math.sin(time * s.s + s.p))) * skyA;
       const x = s.x * W + ptx * s.z * 12, y = s.y * H + pty * s.z * 12;
       if (s.r > 1.25) { b.globalAlpha = a * .9; const z = s.r * 6; b.drawImage(SPR.white, x - z / 2, y - z / 2, z, z); }
       else { b.globalAlpha = a * .75; b.fillRect(x, y, s.r, s.r); }
     }
+    if (wu >= 0) drawWarp(f, wu);
+
+    const mapA = playing ? clamp((T - 2.4) / 1.6) * clamp((9.4 - T) / 1.6) : 0;
+    if (mapA > 0) drawMap(mapA);
 
     if (calmA) drawMoon(calmA);
 
@@ -919,7 +1087,7 @@
     b.globalAlpha = 1;
   }
 
-  function drawFx(f, starsOn, starV) {
+  function drawFx(f, starsOn, starV, holding) {
     c.globalCompositeOperation = 'destination-out';
     c.fillStyle = `rgba(0,0,0,${starsOn ? .09 : .3})`;
     c.fillRect(0, 0, W, H);
@@ -940,22 +1108,35 @@
         p.vx += (CX + p.ox * sc - p.x) * p.k * f;
         p.vy += (CY + p.oy * sc - p.y) * p.k * f;
         const dm = Math.pow(p.d, f); p.vx *= dm; p.vy *= dm;
+      } else if (holding) {
+        const hs = S * .014 * (1 + heartbeat(time) * .1);
+        p.vx += (touch.x + p.hx * hs - p.x) * p.k * .8 * f;
+        p.vy += (touch.y + p.hy * hs - p.y) * p.k * .8 * f;
+        const dm = Math.pow(p.d, f); p.vx *= dm; p.vy *= dm;
       } else {
         p.vx += (Math.random() - .5) * .03 * f; p.vy += ((Math.random() - .5) * .03 - .002) * f;
         const dm = Math.pow(.985, f); p.vx *= dm; p.vy *= dm;
         if (p.x < -10) p.x = W + 10; else if (p.x > W + 10) p.x = -10;
         if (p.y < -10) p.y = H + 10; else if (p.y > H + 10) p.y = -10;
       }
-      if (touch.on) {
+      if (touch.on && !holding) {
         const dx = p.x - touch.x, dy = p.y - touch.y, d2 = dx * dx + dy * dy;
         if (d2 < R2 && d2 > .01) { const d = Math.sqrt(d2), push = (1 - d / R) * 3 * f; p.vx += dx / d * push; p.vy += dy / d * push; }
       }
       p.x += p.vx * f; p.y += p.vy * f;
       const tw = .75 + .25 * Math.sin(time * 3 + p.tw);
+      if (p.mode === 3 && topA > 0) {
+        // while a heart is held, draw the sky's particles above the letter so the heart glows over the text
+        tc.globalAlpha = p.a * tw * .42 * topA;
+        const z = p.s * 5.5;
+        tc.drawImage(p.spr, p.x - z / 2, p.y - z / 2, z, z);
+        continue;
+      }
       c.globalAlpha = Math.min(1, p.a * tw * (p.mode === 3 ? .45 : 1));
       const z = p.s * 7;
       c.drawImage(p.spr, p.x - z / 2, p.y - z / 2, z, z);
     }
+    tc.globalAlpha = 1;
 
     if (calmT >= 0 && floaters.length < 12 && Math.random() < .02 * f) {
       floaters.push({ x: rand(0, W), y: H + 20, vy: rand(.3, .8), s: rand(10, 22), ph: rand(0, 6.28), a: rand(.25, .55) });
@@ -979,11 +1160,83 @@
     c.globalAlpha = 1;
   }
 
+  /* ---------- lanterns ---------- */
+  const lanterns = [];
+  let lanternsDone = false, lanternTimer = 0;
+  const LANTERN = (() => {
+    const cv = document.createElement('canvas'); cv.width = 80; cv.height = 110;
+    const x = cv.getContext('2d');
+    x.translate(40, 55);
+    x.shadowColor = 'rgba(255,170,80,.9)'; x.shadowBlur = 22;
+    const g = x.createLinearGradient(0, -34, 0, 34);
+    g.addColorStop(0, '#ffd27e'); g.addColorStop(.6, '#ff9d4d'); g.addColorStop(1, '#ff7b3b');
+    x.fillStyle = g;
+    x.beginPath(); x.moveTo(-15, -34); x.lineTo(15, -34);
+    x.quadraticCurveTo(24, 0, 13, 30); x.lineTo(-13, 30); x.quadraticCurveTo(-24, 0, -15, -34);
+    x.fill();
+    x.shadowBlur = 0;
+    const ig = x.createRadialGradient(0, 16, 1, 0, 16, 20);
+    ig.addColorStop(0, 'rgba(255,255,225,.95)'); ig.addColorStop(1, 'rgba(255,230,160,0)');
+    x.fillStyle = ig; x.fillRect(-22, -8, 44, 40);
+    x.fillStyle = 'rgba(110,45,20,.35)'; x.fillRect(-13, 28, 26, 3);
+    return cv;
+  })();
+  function launchLanterns() {
+    const n = MI.n;
+    $('#lanternCount').textContent = `${n} lanterns`;
+    const batch = [];
+    for (let i = 0; i < n; i++) {
+      const s = rand(.22, .62);
+      batch.push({ x: rand(.06, .94) * W, y: H + 50 + i * rand(10, 24) + rand(0, 60), s, vy: .35 + s * 1.3, ph: rand(0, 6.28) });
+    }
+    batch.sort((p, q) => q.s - p.s);
+    lanterns.push(...batch);
+    Sound.fx('lanterns');
+    const el = $('#lanternMsg');
+    clearTimeout(lanternTimer);
+    setTimeout(() => el.classList.add('on'), 900);
+    lanternTimer = setTimeout(() => el.classList.remove('on'), 7500);
+  }
+  function drawTop(f) {
+    for (let i = lanterns.length - 1; i >= 0; i--) {
+      const l = lanterns[i];
+      l.y -= l.vy * f; l.x += Math.sin(time * .6 + l.ph) * .25 * f;
+      if (l.y < -120) { lanterns.splice(i, 1); continue; }
+      const w = 80 * l.s, h = 110 * l.s;
+      tc.globalAlpha = (.78 + .22 * Math.sin(time * 7 + l.ph)) * clamp(.4 + l.s) * clamp((l.y + 120) / (H * .35));
+      tc.drawImage(LANTERN, l.x - w / 2, l.y - h / 2, w, h);
+    }
+    tc.globalAlpha = 1;
+  }
+
+  let wasHolding = false, beatN = -1, topUntil = 0, topA = 0;
   function frame(now) {
     const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
     time += dt; const f = dt * 60;
+    if (warpT >= 0 && time - warpT >= WARP) { warpT = -1; play(); }
     if (playing) { T = (now - startAt) / 1000; runEvents(); }
     ptx += (tpx - ptx) * .04; pty += (tpy - pty) * .04;
+
+    const holding = calmT >= 0 && !playing && touch.on && time - touch.downAt > .3 && touch.moved < 14;
+    if (holding && !wasHolding) Sound.fx('gliss');
+    if (holding) {
+      const n = Math.floor(time * 1.15);
+      if (n !== beatN) { beatN = n; Sound.fx('beat'); }
+    }
+    if (!holding && wasHolding) {
+      for (const p of P) {
+        if (p.mode !== 3) continue;
+        const dx = p.x - touch.x, dy = p.y - touch.y, d = Math.hypot(dx, dy) || 1, v = rand(2, 7);
+        p.vx = dx / d * v; p.vy = dy / d * v;
+      }
+      Sound.fx('fall');
+      topUntil = time + 1.4;
+    }
+    wasHolding = holding;
+    topA = holding ? 1 : clamp((topUntil - time) / 1.4);
+    if (calmT < 0) topA = 0;
+    tc.clearRect(0, 0, W, H);
+    tc.globalCompositeOperation = 'lighter';
 
     const starsOn = playing && T >= T_IN && T < T_BOOM;
     const starV = clamp((T - T_IN) / 1.6);
@@ -999,21 +1252,53 @@
     }
 
     drawBg(f, starsOn, starV, orbitU);
-    drawFx(f, starsOn, starV);
+    drawFx(f, starsOn, starV, holding);
+    drawTop(f);
     requestAnimationFrame(frame);
   }
 
   /* ---------- letter ---------- */
   const reveals = [...document.querySelectorAll('.rv')];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function typeIn(el, delay) {
+    const full = el.dataset.full || (el.dataset.full = el.textContent);
+    clearTimeout(el._twd); clearInterval(el._tw);
+    el.innerHTML = '<span class="typed"></span><span class="ghost"></span>';
+    const typed = el.firstChild, ghost = el.lastChild;
+    ghost.textContent = full;
+    el.classList.add('typing');
+    let i = 0;
+    el._twd = setTimeout(() => {
+      el._tw = setInterval(() => {
+        i = Math.min(full.length, i + 1);
+        typed.textContent = full.slice(0, i); ghost.textContent = full.slice(i);
+        if (i >= full.length) { clearInterval(el._tw); el.classList.remove('typing'); }
+      }, 30);
+    }, delay);
+  }
+  function untype(el) {
+    clearTimeout(el._twd); clearInterval(el._tw);
+    el.classList.remove('typing');
+    if (el.dataset.full) el.textContent = el.dataset.full;
+  }
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     let i = 0;
     for (const e of entries) {
       if (!e.isIntersecting) continue;
-      e.target.style.transitionDelay = (i++ * .16) + 's';
+      const delay = i++ * .16;
+      e.target.style.transitionDelay = delay + 's';
       e.target.classList.add('in');
+      if (e.target.classList.contains('tw') && !reduceMotion) typeIn(e.target, delay * 1000 + 450);
       io.unobserve(e.target);
     }
   }, { root: letter, threshold: .15 }) : null;
+  const lio = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+    if (entries.some(e => e.isIntersecting) && calmT >= 0 && !lanternsDone) {
+      lanternsDone = true;
+      setTimeout(launchLanterns, 1200);
+    }
+  }, { root: letter, threshold: .6 }) : null;
+  if (lio) lio.observe(document.querySelector('.actions'));
 
   const START = Date.UTC(2023, 5, 27, 18, 30); // 28 June 2023, 00:00 IST
   const pad = n => String(n).padStart(2, '0');
@@ -1046,6 +1331,24 @@
   $('#monthLine').textContent = `Month ${MI.n} · ${MI.long}`;
   $('#nMonths').textContent = `${cap1(words(MI.n))} months of us${MI.today ? ' today' : ''}.`;
 
+  const MOON_NOW = moonPhase(Date.now());
+  {
+    const { ist } = istParts();
+    $('#tonightDate').textContent = `${ist.getUTCDate()} ${MONTHS[ist.getUTCMonth()].slice(0, 3)} ${ist.getUTCFullYear()}`;
+  }
+  document.querySelectorAll('canvas[data-moon]').forEach(cv => {
+    const p = cv.dataset.moon === 'now' ? MOON_NOW : moonPhase(+cv.dataset.moon);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = cv.height = 64 * dpr;
+    const g = cv.getContext('2d');
+    g.scale(dpr, dpr);
+    const glow = g.createRadialGradient(32, 32, 20, 32, 32, 32);
+    glow.addColorStop(0, `rgba(255,240,220,${.25 * moonLit(p)})`); glow.addColorStop(1, 'rgba(255,240,220,0)');
+    g.fillStyle = glow; g.fillRect(0, 0, 64, 64);
+    drawPhase(g, 32, 32, 24, p);
+    cv.closest('figure').querySelector('em').textContent = `${phaseName(p)} · ${Math.round(moonLit(p) * 100)}%`;
+  });
+
   function tick() {
     if (Date.now() < START) return;
     const { ist, y, m, d } = istParts();
@@ -1071,9 +1374,11 @@
     c.clearRect(0, 0, W, H);
     for (const p of P) p.mode = 0;
     shape = null; rings.length = 0; evIdx = 0; T = 0; calmT = -1;
+    lanternsDone = false; lanterns.length = 0;
     capEl.classList.remove('on');
     letter.classList.remove('show');
     reveals.forEach(el => { el.classList.remove('in'); el.style.transitionDelay = '0s'; });
+    document.querySelectorAll('.tw').forEach(untype);
     skip.hidden = false;
     startAt = performance.now(); playing = true;
     Sound.start();
@@ -1085,7 +1390,7 @@
     intro.classList.add('gone');
     Sound.unlock();
     soundBtn.hidden = false;
-    setTimeout(play, 900);
+    setTimeout(startWarp, 350);
   });
   skip.addEventListener('click', () => toLetter(true));
   const wishEl = $('#wish');
@@ -1101,7 +1406,7 @@
   });
   $('#again').addEventListener('click', () => {
     letter.classList.remove('show');
-    setTimeout(play, 800);
+    setTimeout(startWarp, 500);
   });
   soundBtn.addEventListener('click', () => {
     soundBtn.textContent = Sound.toggle() ? 'Sound off' : 'Sound on';
