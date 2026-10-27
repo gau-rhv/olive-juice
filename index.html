@@ -6,6 +6,17 @@
 <title>For Bubuu</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#06050d">
+<meta name="description" content="A little universe, made only for you.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="For Bubuu ✨">
+<meta property="og:description" content="A little universe, made only for you. Sound on, brightness up.">
+<meta property="og:url" content="https://gau-rhv.github.io/olive-juice/">
+<meta property="og:image" content="https://gau-rhv.github.io/olive-juice/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff7eb3'/%3E%3Cstop offset='1' stop-color='%23ffd38a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Dancing+Script:wght@700&family=Jost:wght@300;400&display=swap">
@@ -104,7 +115,11 @@
     padding: 12px 6px;
   }
   #skip { top: calc(env(safe-area-inset-top, 0px) + 2.4vh); right: max(14px, env(safe-area-inset-right, 0px)); }
-  #sound { bottom: calc(env(safe-area-inset-bottom, 0px) + 2.4vh); right: max(14px, env(safe-area-inset-right, 0px)); z-index: 12; }
+  #sound {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 2.4vh); right: max(14px, env(safe-area-inset-right, 0px)); z-index: 12;
+    padding: 10px 12px 10px 16px; border-radius: 999px; border: 1px solid var(--line);
+    background: rgba(6, 5, 13, .6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
   #skip:focus-visible, #sound:focus-visible, .begin:focus-visible, .again:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
 
   /* ---------- intro ---------- */
@@ -200,8 +215,22 @@
   .love { text-align: center; text-wrap: balance; font-size: clamp(2.7rem, 13vw, 4.2rem); margin-top: .6rem; }
   .sign { margin: 0; text-align: right; font: italic 400 clamp(1.25rem, 5.4vw, 1.5rem)/1.4 var(--serif); color: var(--muted); }
   .sign b { display: block; font-weight: 500; color: var(--blush); }
+  .moonline { text-align: center; margin-top: -.3rem; color: var(--blush); opacity: .8; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-top: 1.4rem; }
+  #wish {
+    position: fixed; inset: 0; z-index: 15; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px));
+    background: radial-gradient(ellipse at center, rgba(6, 5, 13, .9) 0%, rgba(6, 5, 13, .72) 60%, rgba(6, 5, 13, .55) 100%);
+    opacity: 0; transition: opacity 1s ease;
+  }
+  #wish > * { filter: blur(8px); transform: translateY(12px); transition: filter 1.2s ease, transform 1.2s ease; }
+  #wish.on { opacity: 1; }
+  #wish.on > * { filter: none; transform: none; }
+  #wish small { display: block; margin-bottom: .5rem; font: 300 .62rem/1.4 var(--label); letter-spacing: .42em; text-transform: uppercase; color: var(--gold); padding-left: .42em; }
+  #wish .script { display: block; font-size: clamp(2rem, 9vw, 2.8rem); }
   .again {
-    align-self: center; margin-top: 1.4rem; cursor: pointer;
+    cursor: pointer;
     display: inline-flex; align-items: center; gap: .7rem;
     padding: 1rem 1.5rem; border-radius: 999px;
     border: 1px solid rgba(255, 211, 138, .45); background: rgba(255, 211, 138, .06);
@@ -248,7 +277,7 @@
 <button id="sound" type="button" hidden>Sound on</button>
 
 <section id="intro">
-  <p class="eyebrow">28 · 10 · 2026</p>
+  <p class="eyebrow" id="introDate">28 · 10 · 2026</p>
   <h1 class="script">For Bubuu</h1>
   <p class="sub">A little universe, made only for you.</p>
   <button class="begin" id="begin" type="button" aria-label="Begin">
@@ -260,7 +289,7 @@
 
 <main id="letter" aria-label="A letter for Bubuu">
   <div class="wrap">
-    <p class="eyebrow rv">Month 40 · 28 October 2026</p>
+    <p class="eyebrow rv" id="monthLine">Month 40 · 28 October 2026</p>
     <h2 class="script hello rv">My Bubuu,</h2>
 
     <div class="together rv">
@@ -274,9 +303,10 @@
         <div><b id="cS">00</b><span>Seconds</span></div>
       </div>
       <div class="route"><span>Jaipur</span><i></i><em>♥&#xFE0E;</em><i></i><span>Kerala</span></div>
+      <p class="eyebrow moonline">Same sky · same moon</p>
     </div>
 
-    <p class="t rv">Forty months of us today. I'm so grateful to have you in my life.</p>
+    <p class="t rv"><span id="nMonths">Forty months of us today.</span> I'm so grateful to have you in my life.</p>
     <p class="t rv">You're the best thing that has ever happened to me. You are</p>
     <ul class="traits rv">
       <li>the most beautiful girl,</li>
@@ -299,12 +329,20 @@
     <h3 class="script love rv">I love you so much.</h3>
     <p class="sign rv">Forever yours,<b>Kichu ♥&#xFE0E;</b></p>
 
-    <button class="again rv" id="again" type="button">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
-      Watch our stars again
-    </button>
+    <div class="actions rv">
+      <button class="again" id="wishBtn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"/></svg>
+        Make a wish
+      </button>
+      <button class="again" id="again" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        Watch our stars again
+      </button>
+    </div>
   </div>
 </main>
+
+<div id="wish" aria-live="polite"><small>Wish sent to the stars</small><span class="script">I'll always wish for you.</span></div>
 
 
 <script>
@@ -353,6 +391,19 @@
   }));
   const shooting = [];
   const rings = [];
+  const floaters = [];
+  let calmT = -1;
+  const HEART_SPR = (() => {
+    const cv = document.createElement('canvas'); cv.width = cv.height = 64;
+    const x = cv.getContext('2d');
+    x.translate(32, 32); x.shadowColor = 'rgba(255,110,170,.9)'; x.shadowBlur = 12;
+    x.fillStyle = 'rgba(255,150,195,.95)';
+    x.beginPath(); x.moveTo(0, 12);
+    x.bezierCurveTo(-24, -2, -14, -22, 0, -8);
+    x.bezierCurveTo(14, -22, 24, -2, 0, 12);
+    x.fill();
+    return cv;
+  })();
 
   /* ---------- the two stars ---------- */
   const T_IN = 2.4, T_DRIFT = 7.6, T_ORBIT = 12.6, T_BOOM = 17;
@@ -450,7 +501,7 @@
     shape = name;
     let pts;
     if (name === 'heart') pts = heartPts(N);
-    else if (name === '40') pts = textPts('40', '"Cormorant Garamond", Georgia, serif', 'italic 500', S * .66, N);
+    else if (name === 'num') pts = textPts(String(MI.n), '"Cormorant Garamond", Georgia, serif', 'italic 500', S * .66, N);
     else pts = textPts('Bubuu', '"Dancing Script", cursive', '700', Math.min(W * .34, H * .22, 200), N);
     P.forEach((p, i) => {
       p.ox = pts[i].x; p.oy = pts[i].y; p.mode = 2;
@@ -677,6 +728,7 @@
         else if (name === 'boom') { cancel(); boom(t); setPhase('bloom'); nextNote = t + .05; step = 0; bar = 0; }
         else if (name === 'gliss') gliss(t, false);
         else if (name === 'fall') gliss(t, true);
+        else if (name === 'wish') { gliss(t, false); [84, 88, 91, 96].forEach((m, i) => bell(m, t + .5 + i * .09, .08, rand(-.6, .6))); }
       },
       letter(fromSkip) { if (!ac) return; if (fromSkip) cancel(); setPhase('letter'); },
       spark() {
@@ -746,8 +798,8 @@
     [17.5, () => assign('heart', true)],
     [18.4, () => cap('and they never let go.', '28 · 06 · 2023')],
     [22.6, () => cap()],
-    [23.4, () => { assign('40', true); Sound.fx('gliss'); }],
-    [24.2, () => cap('forty months of us.', 'Today')],
+    [23.4, () => { assign('num', true); Sound.fx('gliss'); }],
+    [24.2, () => cap(`${words(MI.n)} months of us.`, MI.today ? 'Today' : `Month ${MI.n}`)],
     [28.2, () => cap()],
     [28.8, () => { assign('bubuu', true); Sound.fx('gliss'); }],
     [29.6, () => cap('happy monthiversary, my love.')],
@@ -778,9 +830,38 @@
     b.fillStyle = g; b.fillRect(s.x - .6, s.y - L2, 1.2, L2 * 2);
   }
 
+  const MARIA = [[-.3, -.2, .28], [.25, .1, .2], [.05, .42, .16], [-.35, .3, .12], [.4, -.35, .1]];
+  function drawMoon(a) {
+    const r = S * .05, x = W * .76 + ptx * 4, y = H * .065 + r + pty * 4, z = r * 10;
+    b.globalAlpha = a * .9; b.drawImage(SPR.white, x - z / 2, y - z / 2, z, z);
+    b.globalCompositeOperation = 'source-over';
+    const g = b.createRadialGradient(x - r * .3, y - r * .3, r * .1, x, y, r);
+    g.addColorStop(0, '#fffaf0'); g.addColorStop(1, '#e6d8c2');
+    b.globalAlpha = a; b.fillStyle = g; b.beginPath(); b.arc(x, y, r, 0, 6.283); b.fill();
+    b.fillStyle = 'rgba(170,150,140,.22)';
+    for (const [dx, dy, rr] of MARIA) { b.beginPath(); b.arc(x + dx * r, y + dy * r, rr * r, 0, 6.283); b.fill(); }
+    b.globalCompositeOperation = 'lighter'; b.fillStyle = '#fff';
+  }
+  const BANDS = [[.22, '255,110,170', 0], [.3, '150,110,255', 2], [.38, '255,200,130', 4]];
+  function drawAurora(a) {
+    for (const [by, col, k] of BANDS) {
+      const base = H * by, amp = H * .04;
+      const wave = x => base + Math.sin(x * .006 + time * .25 + k) * amp + Math.sin(x * .015 - time * .18 + k) * amp * .4;
+      const g = b.createLinearGradient(0, base - amp * 3, 0, base + amp * 3);
+      g.addColorStop(0, `rgba(${col},0)`); g.addColorStop(.5, `rgba(${col},.13)`); g.addColorStop(1, `rgba(${col},0)`);
+      b.globalAlpha = a; b.fillStyle = g; b.beginPath();
+      for (let x = 0; x <= W + 20; x += 20) { const y = wave(x) - amp * 2.2; x ? b.lineTo(x, y) : b.moveTo(x, y); }
+      for (let x = Math.ceil((W + 20) / 20) * 20; x >= 0; x -= 20) b.lineTo(x, wave(x) + amp * 1.2);
+      b.closePath(); b.fill();
+    }
+    b.fillStyle = '#fff';
+  }
+
   function drawBg(f, starsOn, starV, orbitU) {
     b.clearRect(0, 0, W, H);
     b.globalCompositeOperation = 'lighter';
+    const calmA = calmT < 0 ? 0 : clamp((time - calmT) / 3);
+    if (calmA) drawAurora(calmA);
     b.fillStyle = '#fff';
     for (const s of sky) {
       const a = .2 + .8 * (.5 + .5 * Math.sin(time * s.s + s.p));
@@ -789,18 +870,24 @@
       else { b.globalAlpha = a * .75; b.fillRect(x, y, s.r, s.r); }
     }
 
-    if (Math.random() < .0035 * f && shooting.length < 2) {
+    if (calmA) drawMoon(calmA);
+
+    if (Math.random() < (calmA ? .006 : .0035) * f && shooting.length < 2) {
       const a = rand(.35, .7);
       shooting.push({ x: rand(.1, .9) * W, y: rand(0, .4) * H, vx: Math.cos(a) * 9, vy: Math.sin(a) * 9, l: 1 });
     }
     for (let i = shooting.length - 1; i >= 0; i--) {
-      const s = shooting[i];
-      s.x += s.vx * f; s.y += s.vy * f; s.l -= .018 * f;
+      const s = shooting[i], tail = s.big ? 16 : 10;
+      s.x += s.vx * f; s.y += s.vy * f; s.l -= (s.big ? .011 : .018) * f;
       if (s.l <= 0) { shooting.splice(i, 1); continue; }
-      const g = b.createLinearGradient(s.x, s.y, s.x - s.vx * 10, s.y - s.vy * 10);
-      g.addColorStop(0, 'rgba(255,245,240,.9)'); g.addColorStop(1, 'rgba(255,245,240,0)');
-      b.globalAlpha = s.l; b.strokeStyle = g; b.lineWidth = 1.2;
-      b.beginPath(); b.moveTo(s.x, s.y); b.lineTo(s.x - s.vx * 10, s.y - s.vy * 10); b.stroke();
+      const g = b.createLinearGradient(s.x, s.y, s.x - s.vx * tail, s.y - s.vy * tail);
+      g.addColorStop(0, 'rgba(255,245,240,.95)'); g.addColorStop(1, 'rgba(255,245,240,0)');
+      b.globalAlpha = Math.min(1, s.l * (s.big ? 1.6 : 1)); b.strokeStyle = g; b.lineWidth = s.big ? 2.6 : 1.2;
+      b.beginPath(); b.moveTo(s.x, s.y); b.lineTo(s.x - s.vx * tail, s.y - s.vy * tail); b.stroke();
+      if (s.big) {
+        b.drawImage(SPR.gold, s.x - 22, s.y - 22, 44, 44);
+        if (Math.random() < .7 * f) sparks.push({ x: s.x, y: s.y, vx: rand(-1.2, 1.2), vy: rand(-.4, 1.6), l: 1, spr: PAL[(Math.random() * PAL.length) | 0] });
+      }
     }
 
     if (starsOn) {
@@ -870,6 +957,17 @@
       c.drawImage(p.spr, p.x - z / 2, p.y - z / 2, z, z);
     }
 
+    if (calmT >= 0 && floaters.length < 12 && Math.random() < .02 * f) {
+      floaters.push({ x: rand(0, W), y: H + 20, vy: rand(.3, .8), s: rand(10, 22), ph: rand(0, 6.28), a: rand(.25, .55) });
+    }
+    for (let i = floaters.length - 1; i >= 0; i--) {
+      const h = floaters[i];
+      h.y -= h.vy * f; h.x += Math.sin(time * .8 + h.ph) * .3 * f;
+      if (h.y < -30 || calmT < 0) { floaters.splice(i, 1); continue; }
+      c.globalAlpha = h.a * clamp(h.y / (H * .45));
+      c.drawImage(HEART_SPR, h.x - h.s, h.y - h.s, h.s * 2, h.s * 2);
+    }
+
     for (let i = sparks.length - 1; i >= 0; i--) {
       const s = sparks[i];
       s.vx *= Math.pow(.95, f); s.vy = s.vy * Math.pow(.95, f) + .04 * f;
@@ -920,12 +1018,37 @@
   const START = Date.UTC(2023, 5, 27, 18, 30); // 28 June 2023, 00:00 IST
   const pad = n => String(n).padStart(2, '0');
   const cEls = { y: $('#cY'), m: $('#cM'), d: $('#cD'), h: $('#cH'), mi: $('#cMi'), s: $('#cS') };
-  function tick() {
-    if (Date.now() < START) return;
+  function istParts() {
     const ist = new Date(Date.now() + 5.5 * 3600e3);
     let y = ist.getUTCFullYear() - 2023, m = ist.getUTCMonth() - 5, d = ist.getUTCDate() - 28;
     if (d < 0) { m--; d += new Date(Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth(), 0)).getUTCDate(); }
     if (m < 0) { y--; m += 12; }
+    return { ist, y, m, d };
+  }
+
+  // which monthiversary to celebrate: the one that just happened, or the next one if it is under 5 days away
+  const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+  const words = n => n < 20 ? ONES[n] : n < 100 ? TENS[(n / 10) | 0] + (n % 10 ? '-' + ONES[n % 10] : '') : String(n);
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const MI = (() => {
+    const { y, m, d } = istParts();
+    const n = Math.max(1, y * 12 + m + (d >= 25 ? 1 : 0));
+    const date = new Date(Date.UTC(2023, 5 + n, 28));
+    return {
+      n, today: d === 0,
+      long: `28 ${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`,
+      short: `28 · ${pad(date.getUTCMonth() + 1)} · ${date.getUTCFullYear()}`
+    };
+  })();
+  const cap1 = s => s.charAt(0).toUpperCase() + s.slice(1);
+  $('#introDate').textContent = MI.short;
+  $('#monthLine').textContent = `Month ${MI.n} · ${MI.long}`;
+  $('#nMonths').textContent = `${cap1(words(MI.n))} months of us${MI.today ? ' today' : ''}.`;
+
+  function tick() {
+    if (Date.now() < START) return;
+    const { ist, y, m, d } = istParts();
     cEls.y.textContent = y; cEls.m.textContent = m; cEls.d.textContent = d;
     cEls.h.textContent = pad(ist.getUTCHours()); cEls.mi.textContent = pad(ist.getUTCMinutes()); cEls.s.textContent = pad(ist.getUTCSeconds());
   }
@@ -936,6 +1059,7 @@
     document.body.classList.remove('cinema');
     if (fromSkip) scatter();
     Sound.letter(fromSkip);
+    calmT = time;
     skip.hidden = true;
     letter.scrollTop = 0;
     letter.classList.add('show');
@@ -946,7 +1070,7 @@
   function play() {
     c.clearRect(0, 0, W, H);
     for (const p of P) p.mode = 0;
-    shape = null; rings.length = 0; evIdx = 0; T = 0;
+    shape = null; rings.length = 0; evIdx = 0; T = 0; calmT = -1;
     capEl.classList.remove('on');
     letter.classList.remove('show');
     reveals.forEach(el => { el.classList.remove('in'); el.style.transitionDelay = '0s'; });
@@ -964,6 +1088,17 @@
     setTimeout(play, 900);
   });
   skip.addEventListener('click', () => toLetter(true));
+  const wishEl = $('#wish');
+  let wishTimer = 0;
+  $('#wishBtn').addEventListener('click', () => {
+    shooting.push({ x: -60, y: H * rand(.08, .16), vx: (W + 160) / 85, vy: H * .3 / 85, l: 1, big: true });
+    Sound.fx('wish');
+    if (navigator.vibrate) { try { navigator.vibrate(30); } catch (e) {} }
+    clearTimeout(wishTimer);
+    wishEl.classList.remove('on'); void wishEl.offsetWidth;
+    setTimeout(() => wishEl.classList.add('on'), 1300);
+    wishTimer = setTimeout(() => wishEl.classList.remove('on'), 5800);
+  });
   $('#again').addEventListener('click', () => {
     letter.classList.remove('show');
     setTimeout(play, 800);
