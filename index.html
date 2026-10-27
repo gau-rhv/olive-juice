@@ -516,7 +516,7 @@
   const P = Array.from({ length: N }, (_, i) => ({
     x: 0, y: 0, vx: 0, vy: 0, ox: 0, oy: 0, mode: 0, wait: 0,
     k: rand(.018, .048), d: rand(.84, .9), s: rand(.6, 2.1), a: rand(.55, 1),
-    tw: Math.random() * 6.28, spr: PAL[i % PAL.length]
+    tw: Math.random() * 6.28, spr: PAL[i % PAL.length], keep: Math.random() < .25
   }));
   let shape = null;
 
@@ -1132,7 +1132,9 @@
         tc.drawImage(p.spr, p.x - z / 2, p.y - z / 2, z, z);
         continue;
       }
-      c.globalAlpha = Math.min(1, p.a * tw * (p.mode === 3 ? .45 : 1));
+      // behind the letter only a quarter of the stars stay visible, so the text stays calm
+      if (p.mode === 3 && !p.keep) continue;
+      c.globalAlpha = Math.min(1, p.a * tw * (p.mode === 3 ? .35 : 1));
       const z = p.s * 7;
       c.drawImage(p.spr, p.x - z / 2, p.y - z / 2, z, z);
     }
