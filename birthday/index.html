@@ -431,6 +431,52 @@
   .letter .sign small { display: block; font: 400 .95rem/1.4 var(--ui); color: var(--muted); text-shadow: none; }
   .reveal { animation: roomIn .9s cubic-bezier(.2, .7, .2, 1); }
 
+  .pulse { animation: glow 1.4s ease-in-out infinite alternate; }
+  .band.complete { border-color: var(--gold); box-shadow: 0 0 16px rgba(255, 210, 122, .55); }
+
+  /* ---------- finale ---------- */
+  #finale { position: fixed; inset: 0; z-index: 45; background: rgba(3, 2, 10, .2); }
+  #rooftop .inner { transition: opacity .8s ease; }
+  body.showing #rooftop .inner { opacity: 0; visibility: hidden; transition: opacity .8s ease, visibility 0s linear .8s; }
+  #droneCv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #skipShow { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); right: max(12px, env(safe-area-inset-right, 0px)); z-index: 2; }
+  .dcap {
+    position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 9vh); margin: 0; z-index: 2;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+    text-align: center; text-wrap: balance; font-family: var(--script); font-size: clamp(2.1rem, 10vw, 3rem); line-height: 1.15; color: #fff;
+    text-shadow: 0 0 2px #fff, 0 0 10px var(--pink), 0 0 26px var(--pink), 0 2px 18px #000;
+    opacity: 0; transform: translateY(10px); filter: blur(6px); transition: opacity .8s, transform .8s, filter .8s;
+  }
+  .dcap.on { opacity: 1; transform: none; filter: none; }
+  .endcard {
+    position: absolute; inset: 0; z-index: 3; overflow-y: auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2rem; text-align: center;
+    padding: calc(env(safe-area-inset-top, 0px) + 40px) max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 32px) max(16px, env(safe-area-inset-left, 0px));
+    background: radial-gradient(ellipse at center, rgba(5, 3, 12, .72), rgba(5, 3, 12, .92));
+    animation: roomIn 1s ease;
+  }
+  .lifecard {
+    position: relative; overflow: hidden; width: min(340px, 100%); aspect-ratio: 1.586; border-radius: 18px; padding: 16px 18px; text-align: left;
+    display: flex; flex-direction: column; justify-content: space-between; color: #2a1a05;
+    background: linear-gradient(135deg, #8a6420, #ffe7a6 28%, #c9953c 52%, #fff1c6 74%, #a87a2c);
+    box-shadow: 0 0 50px rgba(255, 210, 122, .55), 0 20px 60px rgba(0, 0, 0, .6);
+    animation: lifeIn 1.4s cubic-bezier(.2, .9, .2, 1);
+  }
+  .lifecard::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay;
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .85) 45%, transparent 60%); background-size: 260% 100%;
+    animation: holo 3s linear infinite;
+  }
+  .lc-top { display: flex; justify-content: space-between; align-items: center; }
+  .lc-logo { font-family: var(--logo); font-size: 1.25rem; line-height: 1; }
+  .lc-tier { font: 700 .58rem/1 var(--mono); letter-spacing: .2em; }
+  .lc-chip { width: 44px; height: 34px; border-radius: 7px; background: linear-gradient(135deg, #d9b25c, #fff3c4 50%, #b8862f); box-shadow: inset 0 0 0 1px rgba(90, 55, 10, .5); }
+  .lc-name { font: 700 1.5rem/1 var(--mono); letter-spacing: .22em; }
+  .lc-row { display: flex; gap: 1.6rem; font: 700 .7rem/1.3 var(--mono); letter-spacing: .1em; }
+  .lc-row small { display: block; font-size: .46rem; letter-spacing: .18em; opacity: .7; }
+  .lc-plus { font: 700 .55rem/1 var(--mono); letter-spacing: .16em; opacity: .85; }
+  @keyframes lifeIn { from { opacity: 0; transform: perspective(900px) rotateY(-100deg) scale(.8); } to { opacity: 1; transform: none; } }
+
   /* stamp + toast */
   #stampFx { position: fixed; inset: 0; z-index: 68; display: grid; place-items: center; pointer-events: none; opacity: 0; transition: opacity .3s; background: rgba(5, 3, 12, .55); }
   #stampFx.on { opacity: 1; }
@@ -763,11 +809,43 @@
       <p>And I have just one birthday wish for myself: stay with me. Grow with me. Let me be there for every dream you chase and every one you catch. I'm not going anywhere, Bubuu. Please don't go anywhere either.</p>
       <p>I love you so much. Happy birthday, Chhavi.</p>
       <p class="sign"><small>Forever yours,</small>Kichu ♥&#xFE0E;</p>
+      <button class="btn big pulse" id="finaleBtn" type="button" style="--c: var(--gold); margin-top: .8rem">One last surprise · Look up</button>
       <div class="row" style="margin-top: .6rem">
         <button class="btn" id="toFloor" type="button" style="--c: var(--pink)">Back to the dance floor</button>
         <button class="btn" id="restart" type="button" style="--c: var(--violet)">Start the night again</button>
       </div>
     </article>
+  </div>
+</section>
+
+<!-- last call, after the 7th stamp -->
+<div class="overlay" id="lastCall" role="dialog" aria-label="Last call">
+  <p class="label">Wristband complete · 7 / 7</p>
+  <h2 class="neon" style="--c: var(--gold)">Last Call</h2>
+  <p class="sub" style="max-width: 22rem">You've done every room in the club. The Rooftop is open now, and something is waiting for you up there.</p>
+  <button class="btn big pulse" id="goRoof" type="button" style="--c: var(--gold)">Take me to the rooftop</button>
+</div>
+
+<!-- finale: drone light show -->
+<section id="finale" aria-label="A drone light show in the sky" hidden>
+  <canvas id="droneCv" aria-hidden="true"></canvas>
+  <button class="hudbtn" id="skipShow" type="button">Skip</button>
+  <p class="dcap" id="droneCap" aria-live="polite"></p>
+  <div class="endcard" id="endcard" hidden>
+    <p class="label">Club 21 · Membership</p>
+    <div class="lifecard">
+      <div class="lc-top"><span class="lc-logo">CLUB 21</span><span class="lc-tier">LIFETIME VIP</span></div>
+      <div class="lc-chip" aria-hidden="true"></div>
+      <div class="lc-name">CHHAVI</div>
+      <div class="lc-row"><span><small>MEMBER SINCE</small>19 · 11 · 2005</span><span><small>VALID</small>FOREVER</span></div>
+      <div class="lc-plus">PLUS ONE: KICHU · PERMANENT</div>
+    </div>
+    <h2 class="neon" style="--c: var(--gold); font-size: clamp(2.4rem, 11vw, 3.2rem)">Club 21 never closes for you</h2>
+    <p class="sub" style="max-width: 22rem">Happy 21st birthday, Bubuu. This was all for you. Come back whenever you want, the music is always on.</p>
+    <div class="row">
+      <button class="btn" id="againSky" type="button" style="--c: var(--gold)">Watch the sky again</button>
+      <button class="btn" id="finaleBack" type="button" style="--c: var(--pink)">Back to the club</button>
+    </div>
   </div>
 </section>
 
@@ -1146,7 +1224,7 @@
       b.globalCompositeOperation = 'lighter';
       b.fillStyle = '#fff';
       for (const s of stars) { b.globalAlpha = (.3 + .7 * (.5 + .5 * Math.sin(time * s.s + s.p))) * .8; b.fillRect(s.x * W, s.y * H, s.r, s.r); }
-      if (Math.random() < .012 * fr) firework(rand(.15, .85) * W, rand(.08, .4) * H);
+      if (showT < 0 && Math.random() < .012 * fr) firework(rand(.15, .85) * W, rand(.08, .4) * H);
       b.globalCompositeOperation = 'source-over';
       if (!skyline) buildSkyline();
       b.globalAlpha = 1; b.drawImage(skyline, 0, H * .66, W, H * .34);
@@ -1226,7 +1304,10 @@
   const hud = $('#hud'), band = $('#band'), toastEl = $('#toast');
   let current = 'street';
   ROOMS.forEach(r => { const i = document.createElement('i'); i.style.setProperty('--c', r.c); i.title = r.name; band.appendChild(i); });
-  function refreshBand() { [...band.children].forEach((i, k) => i.classList.toggle('on', !!S.stamps[ROOMS[k].id])); }
+  function refreshBand() {
+    [...band.children].forEach((i, k) => i.classList.toggle('on', !!S.stamps[ROOMS[k].id]));
+    band.classList.toggle('complete', ROOMS.every(r => S.stamps[r.id]));
+  }
   const stampCount = () => ROOMS.filter(r => S.stamps[r.id]).length;
   let toastT = 0;
   function toast(msg, ms) {
@@ -1270,8 +1351,16 @@
     confetti(70);
     setTimeout(() => { stampFx.classList.remove('on'); refreshBand(); }, 1700);
     const n = stampCount();
-    setTimeout(() => toast(n === 7 ? 'All 7 stamps! The Rooftop is open. Head back to the dance floor.' : `${n} of 7 stamps. ${7 - n} to go.`, 4200), 1900);
+    if (n === 7) setTimeout(lastCall, 2000);
+    else setTimeout(() => toast(`${n} of 7 stamps. ${7 - n} to go.`, 4200), 1900);
   }
+  function lastCall() {
+    $$('.overlay.on').forEach(o => o.classList.remove('on'));
+    $('#lastCall').classList.add('on');
+    M.sfx('jackpot'); M.sfx('horn'); confetti(160); coins(40);
+    if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60, 40, 160]); } catch (e) {} }
+  }
+  $('#goRoof').addEventListener('click', () => { $('#lastCall').classList.remove('on'); M.sfx('whoosh'); go('rooftop'); });
 
   /* ================= street ================= */
   const logoEl = $('#logo');
@@ -1332,9 +1421,10 @@
     const n = stampCount(), open = n === 7;
     const roof = document.createElement('button');
     roof.type = 'button'; roof.className = 'doorcard wide ' + (open ? 'unlocked' : 'locked'); roof.style.setProperty('--c', '#ffd27a');
-    roof.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${open ? ROOF_ICON : '<rect x="6" y="11" width="12" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/>'}</svg><span class="dt">The Rooftop</span><span class="dd">${open ? 'Your birthday is waiting upstairs. Go.' : `Locked · ${n} of 7 stamps`}</span><span class="st">${open ? 'OPEN' : 'VIP'}</span>`;
+    const dd = !open ? `Locked · ${n} of 7 stamps` : S.finale ? 'Lifetime VIP. Tap to watch the sky show again.' : 'Your birthday is waiting upstairs. Go.';
+    roof.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${open ? ROOF_ICON : '<rect x="6" y="11" width="12" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/>'}</svg><span class="dt">The Rooftop</span><span class="dd">${dd}</span><span class="st">${S.finale ? 'LIFETIME' : open ? 'OPEN' : 'VIP'}</span>`;
     roof.addEventListener('click', () => {
-      if (stampCount() === 7) { M.sfx('whoosh'); go('rooftop'); }
+      if (stampCount() === 7) { M.sfx('whoosh'); go('rooftop'); if (S.finale) setTimeout(startShow, 900); }
       else { M.sfx('lose'); toast(`The Rooftop opens with all 7 stamps. You have ${n}.`); }
     });
     grid.appendChild(roof);
@@ -1768,6 +1858,156 @@
     S = fresh(); save(); location.reload();
   });
 
+  /* ================= finale: drone light show ================= */
+  const finaleEl = $('#finale'), dcv = $('#droneCv'), dctx = dcv.getContext('2d'), dcap = $('#droneCap');
+  const DN = innerWidth < 600 ? 820 : 1100;
+  const DCOL = ['#ffd27a', '#ff3fb4', '#3ff0ff', '#ffffff', '#a46bff', '#ff4466'];
+  let drones = [], showT = -1, showIdx = 0, capTimer = 0;
+  function sizeDrones() { dcv.width = Math.round(W * DPR); dcv.height = Math.round(H * DPR); dctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  // draws a shape on a scratch canvas covering the sky, then picks DN lit pixels as drone targets
+  function samplePts(draw) {
+    const bw = Math.max(1, Math.round(W)), bh = Math.max(1, Math.round(H * .52));
+    const cv = document.createElement('canvas'); cv.width = bw; cv.height = bh;
+    const x = cv.getContext('2d', { willReadFrequently: true });
+    x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    draw(x, bw, bh);
+    const d = x.getImageData(0, 0, bw, bh).data, pts = [];
+    for (let y = 0; y < bh; y += 2) for (let xx = 0; xx < bw; xx += 2) if (d[(y * bw + xx) * 4 + 3] > 128) pts.push({ x: xx, y: y + H * .07 });
+    shuffle(pts);
+    const out = [];
+    for (let i = 0; i < DN; i++) { const p = pts.length ? pts[i % pts.length] : { x: W / 2, y: H / 3 }; out.push({ x: p.x + rand(-1, 1), y: p.y + rand(-1, 1) }); }
+    return out;
+  }
+  function fitFont(x, str, weightFamily, maxW, maxH) {
+    let s = maxH;
+    x.font = `${weightFamily.replace('%', s)}`;
+    const w = x.measureText(str).width;
+    if (w > maxW) { s = s * maxW / w; x.font = `${weightFamily.replace('%', s)}`; }
+    return s;
+  }
+  const heartPoly = (x, cx, cy, sc) => {
+    x.beginPath();
+    for (let i = 0; i <= 120; i++) {
+      const t = i / 120 * Math.PI * 2;
+      const hx = 16 * Math.sin(t) ** 3, hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+      i ? x.lineTo(cx + hx * sc, cy + (hy - 2.5) * sc) : x.moveTo(cx + hx * sc, cy + (hy - 2.5) * sc);
+    }
+    x.closePath(); x.fill();
+  };
+  const SHAPES = {
+    cloud: () => Array.from({ length: DN }, () => ({ x: rand(.05, .95) * W, y: rand(.06, .55) * H })),
+    n21: () => samplePts((x, w, h) => { fitFont(x, '21', '700 %px Outfit, Arial, sans-serif', w * .8, h * .85); x.fillText('21', w / 2, h / 2); }),
+    crown: () => samplePts((x, w, h) => {
+      const s = Math.min(w * .38, h * .42), cx = w / 2, cy = h / 2;
+      x.beginPath(); x.moveTo(cx - s, cy + s * .55); x.lineTo(cx - s, cy - s * .45); x.lineTo(cx - s * .5, cy + s * .05); x.lineTo(cx, cy - s * .75);
+      x.lineTo(cx + s * .5, cy + s * .05); x.lineTo(cx + s, cy - s * .45); x.lineTo(cx + s, cy + s * .55); x.closePath(); x.fill();
+      x.fillRect(cx - s, cy + s * .66, s * 2, s * .2);
+      [[-1, -.45], [0, -.75], [1, -.45]].forEach(([dx, dy]) => { x.beginPath(); x.arc(cx + dx * s, cy + dy * s - s * .12, s * .11, 0, 6.283); x.fill(); });
+    }),
+    heart: () => samplePts((x, w, h) => heartPoly(x, w / 2, h / 2, Math.min(w * .027, h * .028))),
+    bigheart: () => samplePts((x, w, h) => heartPoly(x, w / 2, h / 2, Math.min(w * .03, h * .032))),
+    name: () => samplePts((x, w, h) => { fitFont(x, 'Chhavi', '400 %px Yellowtail, cursive', w * .86, h * .6); x.fillText('Chhavi', w / 2, h / 2); }),
+    hb: () => samplePts((x, w, h) => {
+      const s = Math.min(fitFont(x, 'BIRTHDAY', '700 %px Outfit, Arial, sans-serif', w * .86, h * .3), h * .3);
+      x.font = `700 ${s}px Outfit, Arial, sans-serif`;
+      x.fillText('HAPPY', w / 2, h / 2 - s * .62); x.fillText('BIRTHDAY', w / 2, h / 2 + s * .62);
+    })
+  };
+  const PALETTE_FOR = {
+    cloud: () => (Math.random() * 6) | 0,
+    n21: () => 0,
+    crown: () => Math.random() < .85 ? 0 : 3,
+    heart: () => Math.random() < .8 ? 1 : 5,
+    bigheart: (d) => d.x < W / 2 ? 1 : 5,
+    name: (d) => d.x < W * .4 ? 3 : d.x < W * .65 ? 1 : 4,
+    hb: (d) => d.y < H * .33 ? 2 : 1
+  };
+  function formation(name) {
+    const pts = SHAPES[name]();
+    drones.forEach((d, i) => { d.tx = pts[i].x; d.ty = pts[i].y; d.mode = 0; });
+    drones.forEach(d => { d.ci = PALETTE_FOR[name](d); });
+    if (name !== 'cloud') { M.sfx('whoosh'); [79, 84, 88].forEach((m, i) => setTimeout(() => M.sfx('coin'), i * 90)); }
+  }
+  function say(text) {
+    dcap.classList.remove('on');
+    clearTimeout(capTimer);
+    if (!text) return;
+    capTimer = setTimeout(() => { dcap.textContent = text; dcap.classList.add('on'); }, 450);
+  }
+  function burst() {
+    const cx = W / 2, cy = H * .33;
+    drones.forEach(d => {
+      const a = Math.atan2(d.y - cy, d.x - cx) + rand(-.3, .3), s = rand(2, 9);
+      d.vx = Math.cos(a) * s; d.vy = Math.sin(a) * s - 2; d.mode = 1; d.l = rand(.8, 1.3);
+    });
+    M.sfx('boom'); M.sfx('jackpot');
+    for (let i = 0; i < 10; i++) setTimeout(() => firework(rand(.1, .9) * W, rand(.08, .45) * H), i * 260);
+    confetti(220); coins(30);
+    document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake');
+    if (navigator.vibrate) { try { navigator.vibrate([100, 50, 100, 50, 300]); } catch (e) {} }
+  }
+  const SHOW = [
+    [0, () => { formation('cloud'); say('Look up, Bubuu.'); M.setMix('rooftop'); M.sfx('riser', 3.4); }],
+    [3.6, () => { formation('n21'); say('21 years of you.'); M.setMix('floor'); }],
+    [9, () => { formation('crown'); say('The queen of the night.'); }],
+    [14.5, () => { formation('heart'); say('Every light up here is for you.'); }],
+    [20, () => { formation('name'); say('The girl of my dreams.'); }],
+    [25.5, () => { formation('hb'); say('Happy birthday, my love.'); }],
+    [31, () => { formation('bigheart'); say('Forever yours. Kichu.'); }],
+    [36.5, () => { say(''); burst(); }],
+    [40.5, endShow]
+  ];
+  function startShow() {
+    if (current !== 'rooftop') go('rooftop');
+    sizeDrones();
+    drones = Array.from({ length: DN }, () => ({ x: rand(0, W), y: rand(H * .7, H * .95), tx: 0, ty: 0, k: rand(.018, .042), ci: 3, ph: rand(0, 6.28), mode: 0, vx: 0, vy: 0, l: 1 }));
+    finaleEl.hidden = false; $('#endcard').hidden = true; $('#skipShow').hidden = false;
+    hud.hidden = true; document.body.classList.add('showing');
+    showT = time; showIdx = 0;
+  }
+  function endShow() {
+    showT = -1;
+    say('');
+    $('#skipShow').hidden = true;
+    $('#endcard').hidden = false; $('#endcard').scrollTop = 0;
+    M.setMix('lounge'); setTimeout(() => M.hbd(), 900);
+    S.finale = true; save();
+    confetti(80);
+  }
+  function closeShow() {
+    finaleEl.hidden = true; drones = []; showT = -1; dctx.clearRect(0, 0, W, H);
+    hud.hidden = false; document.body.classList.remove('showing');
+    M.setMix('rooftop');
+  }
+  function drawDrones(fr) {
+    if (finaleEl.hidden) return;
+    if (showT >= 0) { const t = time - showT; while (showIdx < SHOW.length && t >= SHOW[showIdx][0]) SHOW[showIdx++][1](); }
+    dctx.clearRect(0, 0, W, H);
+    dctx.globalCompositeOperation = 'lighter';
+    for (let i = drones.length - 1; i >= 0; i--) {
+      const d = drones[i];
+      if (d.mode === 1) {
+        d.vx *= Math.pow(.975, fr); d.vy = d.vy * Math.pow(.975, fr) + .05 * fr; d.x += d.vx * fr; d.y += d.vy * fr; d.l -= .008 * fr;
+        if (d.l <= 0) { drones.splice(i, 1); continue; }
+      } else {
+        d.x += (d.tx - d.x) * d.k * fr; d.y += (d.ty - d.y) * d.k * fr;
+      }
+      const hx = d.mode ? 0 : Math.sin(time * 1.3 + d.ph) * .6, hy = d.mode ? 0 : Math.cos(time * 1.1 + d.ph) * .6;
+      const tw = .75 + .25 * Math.sin(time * 4 + d.ph);
+      dctx.globalAlpha = Math.min(1, (d.mode ? d.l : 1) * tw);
+      const col = DCOL[d.ci];
+      dctx.drawImage(spriteFor(col), d.x + hx - 5.5, d.y + hy - 5.5, 11, 11);
+      dctx.fillStyle = '#fff'; dctx.globalAlpha *= .9; dctx.fillRect(d.x + hx - .9, d.y + hy - .9, 1.8, 1.8);
+    }
+    dctx.globalAlpha = 1; dctx.globalCompositeOperation = 'source-over';
+  }
+  $('#finaleBtn').addEventListener('click', () => { M.sfx('whoosh'); startShow(); });
+  $('#skipShow').addEventListener('click', () => { drones = []; dctx.clearRect(0, 0, W, H); endShow(); });
+  $('#againSky').addEventListener('click', () => startShow());
+  $('#finaleBack').addEventListener('click', () => { closeShow(); go('floor'); });
+  addEventListener('resize', () => { if (!finaleEl.hidden) sizeDrones(); });
+
   /* ================= main loop ================= */
   M.on((s) => {
     if (s % 4 === 0) beat = 1;
@@ -1784,7 +2024,7 @@
     const fr = dt * 60;
     M.pump();
     beat = Math.max(0, beat - dt * 3.2);
-    drawBg(dt, fr); drawFx(fr);
+    drawBg(dt, fr); drawDrones(fr); drawFx(fr);
     requestAnimationFrame(frame);
   }
   document.addEventListener('visibilitychange', () => {
